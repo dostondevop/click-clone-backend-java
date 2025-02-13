@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,13 +21,15 @@ public class ServiceEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
-    private double commission;
-    private double cashback;
+    private double commission = 0;
+    private double cashback = 0;
 
-    @ManyToMany
-    private List<InputEntity> inputs;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<InputEntity> inputs = new ArrayList<>();
 
     @ManyToOne
+    @Column(nullable = false)
     private AttachmentEntity imageAttachment;
 }

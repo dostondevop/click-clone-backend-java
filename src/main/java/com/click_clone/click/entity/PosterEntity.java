@@ -15,16 +15,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class NewsEntity extends BaseEntity {
+public class PosterEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String content;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    private boolean active = true;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "news_viewers",
             joinColumns = @JoinColumn(name = "news_id"),
@@ -32,7 +37,7 @@ public class NewsEntity extends BaseEntity {
     )
     private List<UserEntity> viewers = new ArrayList<>();;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "news_likes",
             joinColumns = @JoinColumn(name = "news_id"),
@@ -40,6 +45,7 @@ public class NewsEntity extends BaseEntity {
     )
     private List<UserEntity> likedPeople = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @Column(nullable = false, unique = true)
     private AttachmentEntity imageAttachment;
 }

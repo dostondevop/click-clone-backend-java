@@ -1,5 +1,6 @@
 package com.click_clone.click.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,13 +20,20 @@ public class FavoriteEntity extends BaseEntity {
     @GeneratedValue
     private UUID id;
 
+    @Column(nullable = false)
     private String data;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
+    @Column(nullable = false)
     private ServiceEntity service;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Column(nullable = false)
     private UserEntity user;
+
+    @ManyToOne
+    @JsonBackReference
+    private HomeEntity home;
 }

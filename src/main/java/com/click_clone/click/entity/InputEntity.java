@@ -1,10 +1,7 @@
 package com.click_clone.click.entity;
 
 import com.click_clone.click.entity.enums.InputType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +20,12 @@ public class InputEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String label;
+
+    @Column(nullable = false)
     private String placeholder;
+
+    @Column(nullable = false)
     private InputType inputType;
 }
