@@ -1,6 +1,6 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.contoller.dto.RefreshTokenDto;
+import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,8 +1,7 @@
-package com.click_clone.click.contoller;
+package com.click_clone.click.contoller.token;
 
-
-import com.click_clone.click.contoller.dto.JwtResponseDto;
-import com.click_clone.click.contoller.dto.RefreshTokenDto;
+import com.click_clone.click.contoller.token.dto.JwtResponseDto;
+import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
 import com.click_clone.click.service.TokenService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;

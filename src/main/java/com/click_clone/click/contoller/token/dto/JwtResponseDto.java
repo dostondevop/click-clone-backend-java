@@ -1,4 +1,4 @@
-package com.click_clone.click.contoller.dto;
+package com.click_clone.click.contoller.token.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

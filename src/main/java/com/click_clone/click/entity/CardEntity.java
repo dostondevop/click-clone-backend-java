@@ -32,8 +32,12 @@ public class CardEntity extends BaseEntity {
 
     private String cardName;
 
-    @Column(nullable = false)
-    private String bankName;
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private AttachmentEntity bankImage;
+
+    private boolean considerInTotalBalance = true;
+    private boolean monitoring = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
