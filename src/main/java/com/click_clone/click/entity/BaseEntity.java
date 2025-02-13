@@ -21,7 +21,7 @@ public abstract class BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedUp;
+    private LocalDateTime updatedAt;
 
     @CreatedBy
     private String createdBy;

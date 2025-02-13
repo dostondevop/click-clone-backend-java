@@ -2,6 +2,7 @@ package com.click_clone.click.entity;
 
 import com.click_clone.click.entity.enums.TransactionStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,14 +21,25 @@ public class TransactionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String data;
+
+    @Column(precision = 30, scale = 0)
     private BigInteger amount;
+
+    @Column(precision = 30, scale = 0)
     private BigInteger cashback;
+
+    @Column(precision = 30, scale = 0)
     private BigInteger commission;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionStatus status;
 
     @ManyToOne
     @JoinColumn(name = "from_card_id")
+    @Column(nullable = false)
     private CardEntity fromCard;
 
     @ManyToOne
@@ -40,5 +52,6 @@ public class TransactionEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "image_id")
+    @Column(nullable = false)
     private AttachmentEntity image;
 }

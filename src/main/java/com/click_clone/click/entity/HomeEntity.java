@@ -1,5 +1,6 @@
 package com.click_clone.click.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CategoryEntity extends BaseEntity {
+public class HomeEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,10 +24,8 @@ public class CategoryEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
-    @Column(nullable = false, unique = true)
-    private String icon;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_id")
-    private List<CategoryEntity> parentList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "home")
+    @JsonManagedReference
+    private List<FavoriteEntity> favoriteList = new ArrayList<>();
 }
