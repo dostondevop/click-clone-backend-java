@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
+import java.util.UUID;
+
 @AllArgsConstructor
-public class PosterRequestDto {
+@NoArgsConstructor
+@Data
+public class PosterUpdateRequestDto {
+    private UUID id;
     private String title;
     private String content;
 }

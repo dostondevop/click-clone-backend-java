@@ -14,5 +14,4 @@ public class CardCreateRequestDto {
     private String expiryDate;
     private String cardName;
     private boolean main;
-    private UUID userId;
 }

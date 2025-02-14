@@ -1,4 +1,4 @@
-package com.click_clone.click.contoller.user.dto;
+package com.click_clone.click.contoller.user.dto.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

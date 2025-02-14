@@ -32,4 +32,7 @@ public class ServiceEntity extends BaseEntity {
     @ManyToOne
     @Column(nullable = false)
     private AttachmentEntity imageAttachment;
+
+    @ManyToOne
+    private CategoryEntity categoryEntity;
 }

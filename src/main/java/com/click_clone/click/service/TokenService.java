@@ -21,7 +21,7 @@ public class TokenService {
         jwtService.validateRefreshToken(refreshToken);
         Claims claims = jwtService.refreshTokenClaims(refreshToken);
         String username = claims.getSubject();
-        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
+        Optional<UserEntity> optionalUser = userRepository.findByPhoneNumber(username);
         if (optionalUser.isEmpty()) {
             throw new IllegalStateException("User not found");
         }

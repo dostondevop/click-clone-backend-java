@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/attachment")
+@RequestMapping("/api/attachment")
 @RequiredArgsConstructor
 public class AttachmentController {
     private final AttachmentService attachmentService;

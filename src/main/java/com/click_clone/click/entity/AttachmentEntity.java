@@ -2,10 +2,7 @@ package com.click_clone.click.entity;
 
 import com.click_clone.click.entity.enums.AttachmentType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class AttachmentEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
