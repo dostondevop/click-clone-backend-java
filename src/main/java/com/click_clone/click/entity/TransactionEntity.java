@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -22,7 +23,8 @@ public class TransactionEntity extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String data;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<InputValue> inputValues;
 
     @Column(precision = 30, scale = 0)
     private BigInteger amount;
@@ -38,8 +40,7 @@ public class TransactionEntity extends BaseEntity {
     private TransactionStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "from_card_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "from_card_id", nullable = false)
     private CardEntity fromCard;
 
     @ManyToOne
@@ -51,7 +52,6 @@ public class TransactionEntity extends BaseEntity {
     private ServiceEntity service;
 
     @ManyToOne
-    @JoinColumn(name = "image_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "image_id", nullable = false)
     private AttachmentEntity image;
 }

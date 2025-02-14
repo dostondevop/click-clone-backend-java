@@ -13,8 +13,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class ServiceSerialNumberEntity extends BaseEntity {
+public class ServiceSerialNumberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,13 +23,11 @@ public class ServiceSerialNumberEntity extends BaseEntity {
     private String serialNumber;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "select_item_id", nullable = false)
     @JsonBackReference
-    @Column(nullable = false)
-    private CityEntity city;
+    private SelectItemEntity selectItem;
 
     @ManyToOne
-    @JoinColumn(name = "service_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "service_id", nullable = false)
     private ServiceEntity service;
 }

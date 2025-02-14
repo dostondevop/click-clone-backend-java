@@ -30,7 +30,7 @@ public class ServiceEntity extends BaseEntity {
     private List<InputEntity> inputs = new ArrayList<>();
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private AttachmentEntity imageAttachment;
 
     @ManyToOne

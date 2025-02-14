@@ -10,9 +10,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Builder
-public class AttachmentEntity extends BaseEntity {
+public class AttachmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

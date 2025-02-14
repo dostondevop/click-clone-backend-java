@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -21,16 +22,15 @@ public class FavoriteEntity extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String data;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<InputValue> inputValues;
 
     @ManyToOne
-    @JoinColumn(name = "service_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "service_id", nullable = false)
     private ServiceEntity service;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @ManyToOne

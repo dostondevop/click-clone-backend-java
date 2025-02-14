@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -34,14 +35,14 @@ public class AutoPaymentEntity extends BaseEntity {
     @Column(nullable = false, precision = 30, scale = 0)
     private BigInteger amount;
 
-    @Column(nullable = false)
-    private String data;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<InputValue> inputValues;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private ServiceEntity service;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private CardEntity card;
 }

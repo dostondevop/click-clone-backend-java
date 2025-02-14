@@ -54,6 +54,5 @@ public class CardEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
-    @Column(nullable = false)
     private UserEntity user;
 }

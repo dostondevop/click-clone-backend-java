@@ -1,6 +1,5 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

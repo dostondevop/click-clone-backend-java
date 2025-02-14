@@ -16,5 +16,4 @@ public class TransactionRequestDto {
     private String toAccountNumber;
     private String fromCardNumber;
     private String data;
-
 }

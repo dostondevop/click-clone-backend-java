@@ -16,8 +16,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class CityEntity extends BaseEntity {
+public class SelectItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,12 +26,16 @@ public class CityEntity extends BaseEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "parent_id")
     @JsonBackReference
-    @Column(nullable = false)
-    private RegionEntity region;
+    private SelectItemEntity parent;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "city", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ServiceSerialNumberEntity> serviceSerialNumbers = new ArrayList<>();
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(nullable = false)
+    private InputEntity input;
 }

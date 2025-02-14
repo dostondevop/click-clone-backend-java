@@ -19,5 +19,4 @@ public class TransactionResponseDto {
     private String fromCardNumber;
     private String toCardNumber;
     private String toAccountNumber;
-
 }

@@ -46,6 +46,6 @@ public class PosterEntity extends BaseEntity {
     private List<UserEntity> likedPeople = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(nullable = false, unique = true)
+    @JoinColumn(nullable = false, unique = true)
     private AttachmentEntity imageAttachment;
 }
