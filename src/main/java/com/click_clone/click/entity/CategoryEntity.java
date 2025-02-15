@@ -27,6 +27,10 @@ public class CategoryEntity extends BaseEntity {
     private String icon;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_id")
+    @JoinTable(
+            name = "category_parent",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
+    )
     private List<CategoryEntity> parentList = new ArrayList<>();
 }

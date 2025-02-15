@@ -13,5 +13,6 @@ public class CardCreateRequestDto {
     private String cardNumber;
     private String expiryDate;
     private String cardName;
+    private String bankName;
     private boolean main;
 }

@@ -17,7 +17,7 @@ public class PosterService {
     private final UserService userService;
 
     public List<PosterEntity> getPosterList() {
-        return posterRepository.findAllByActiveIsTrueOrderByCreatedByDesc();
+        return posterRepository.findAllByActiveIsTrue();
     }
 
     public PosterEntity getPosterById(UUID id) {
@@ -25,18 +25,18 @@ public class PosterService {
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
     }
 
-    public void create(PosterEntity poster) {
-        posterRepository.save(poster);
+    public PosterEntity create(PosterEntity poster) {
+        return posterRepository.save(poster);
     }
 
-    public void addImage(UUID id, AttachmentEntity image) {
+    public PosterEntity addImage(UUID id, AttachmentEntity image) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
         poster.setImageAttachment(image);
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 
-    public void updatePoster(UUID id, String title, String content) {
+    public PosterEntity updatePoster(UUID id, String title, String content) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
 
@@ -48,34 +48,34 @@ public class PosterService {
             poster.setContent(content);
         }
 
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 
-    public void addViewer(UUID id) {
+    public PosterEntity addViewer(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
         poster.getViewers().add(userService.getCurrentUser());
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 
-    public void pressALike(UUID id) {
+    public PosterEntity pressALike(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
         poster.getLikedPeople().add(userService.getCurrentUser());
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 
-    public void getLikeBack(UUID id) {
+    public PosterEntity getLikeBack(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
         poster.getLikedPeople().remove(userService.getCurrentUser());
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 
-    public void inactivatePoster(UUID id) {
+    public PosterEntity inactivatePoster(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
         poster.setActive(false);
-        posterRepository.save(poster);
+        return posterRepository.save(poster);
     }
 }

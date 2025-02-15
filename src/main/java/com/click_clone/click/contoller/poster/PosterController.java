@@ -37,40 +37,48 @@ public class PosterController {
     }
 
     @PostMapping
-    public void createPoster(@RequestBody PosterCreateRequestDto request) {
+    public PosterResponseDto createPoster(@RequestBody PosterCreateRequestDto request) {
         PosterEntity poster = posterConvertor.dtoToPoster(request);
-        posterService.create(poster);
+        PosterEntity posterEntity = posterService.create(poster);
+        return posterConvertor.entityToDto(posterEntity);
     }
 
     @PutMapping("/image")
-    public void addImage(@RequestParam("posterId") UUID id,
+    public PosterResponseDto addImage(@RequestParam("posterId") UUID id,
                          @RequestParam("file") MultipartFile file) throws IOException {
         AttachmentEntity attachment = AttachmentConvertor.convertToEntity(file);
-        posterService.addImage(id, attachment);
+        PosterEntity poster = posterService.addImage(id, attachment);
+        return posterConvertor.entityToDto(poster);
     }
 
     @PutMapping
-    public void updatePoster(@RequestBody PosterUpdateRequestDto request) {
-        posterService.updatePoster(request.getId(), request.getTitle(), request.getContent());
+    public PosterResponseDto updatePoster(@RequestBody PosterUpdateRequestDto request) {
+        PosterEntity poster = posterService.updatePoster(request.getId(), request.getTitle(),
+                request.getContent());
+        return posterConvertor.entityToDto(poster);
     }
 
     @PutMapping("/viewer")
-    public void addViewer(@RequestBody PosterIdRequestDto request) {
-        posterService.addViewer(request.getId());
+    public PosterResponseDto addViewer(@RequestBody PosterIdRequestDto request) {
+        PosterEntity poster = posterService.addViewer(request.getId());
+        return posterConvertor.entityToDto(poster);
     }
 
     @PutMapping("/liked")
-    public void pressALike(@RequestBody PosterIdRequestDto request) {
-        posterService.pressALike(request.getId());
+    public PosterResponseDto pressALike(@RequestBody PosterIdRequestDto request) {
+        PosterEntity poster = posterService.pressALike(request.getId());
+        return posterConvertor.entityToDto(poster);
     }
 
     @PutMapping("/unliked")
-    public void getLikeBack(@RequestBody PosterIdRequestDto request) {
-        posterService.getLikeBack(request.getId());
+    public PosterResponseDto getLikeBack(@RequestBody PosterIdRequestDto request) {
+        PosterEntity poster = posterService.getLikeBack(request.getId());
+        return posterConvertor.entityToDto(poster);
     }
 
     @DeleteMapping
-    public void remove(@RequestBody PosterIdRequestDto request) {
-        posterService.inactivatePoster(request.getId());
+    public PosterResponseDto remove(@RequestBody PosterIdRequestDto request) {
+        PosterEntity poster = posterService.inactivatePoster(request.getId());
+        return posterConvertor.entityToDto(poster);
     }
 }

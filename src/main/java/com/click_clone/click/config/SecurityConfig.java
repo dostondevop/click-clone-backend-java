@@ -21,8 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private static final String[] WHITELIST = {
-        "/api/v1/user/**",
-        "/api/v1/token/**"
+        "/api/auth/**",
+        "/api/token/**",
+        "/api/card/currency"
     };
 
     @Bean

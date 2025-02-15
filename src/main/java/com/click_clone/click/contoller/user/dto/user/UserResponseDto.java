@@ -25,4 +25,5 @@ public class UserResponseDto {
     private LocalDate expiryDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UUID imageId;
 }

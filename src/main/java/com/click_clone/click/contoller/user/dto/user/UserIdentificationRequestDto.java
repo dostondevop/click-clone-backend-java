@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserIdentificationDto {
+public class UserIdentificationRequestDto {
     private UUID userId;
     private String firstName;
     private String lastName;

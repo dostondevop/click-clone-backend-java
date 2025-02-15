@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PosterRepository extends JpaRepository<PosterEntity, UUID> {
-    List<PosterEntity> findAllByActiveIsTrueOrderByCreatedByDesc();
+    List<PosterEntity> findAllByActiveIsTrue();
     Optional<PosterEntity> findByIdAndActiveIsTrue(UUID id);
 }

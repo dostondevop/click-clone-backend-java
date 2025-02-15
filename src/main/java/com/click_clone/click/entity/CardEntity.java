@@ -5,10 +5,7 @@ import com.click_clone.click.entity.enums.CurrencyType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -18,7 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CardEntity extends BaseEntity {
+@Builder
+public class  CardEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -35,6 +33,9 @@ public class CardEntity extends BaseEntity {
     @JoinColumn(nullable = false)
     @ManyToOne
     private AttachmentEntity bankImage;
+
+    @ManyToOne
+    private AttachmentEntity cardTypeImage;
 
     private boolean considerInTotalBalance = true;
     private boolean monitoring = false;

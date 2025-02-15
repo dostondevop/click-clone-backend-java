@@ -10,7 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class UserPasswordUpdateRequestDto {
-    private UUID userId;
     private String oldPassword;
     private String newPassword;
 }
