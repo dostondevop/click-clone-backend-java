@@ -1,15 +1,13 @@
 package com.click_clone.click.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
+@Builder
 @Data
 @Entity
 @NoArgsConstructor
@@ -32,5 +30,6 @@ public class CategoryEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "parent_id")
     )
+    @Builder.Default
     private List<CategoryEntity> parentList = new ArrayList<>();
 }

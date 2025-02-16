@@ -3,10 +3,7 @@ package com.click_clone.click.entity;
 import com.click_clone.click.entity.enums.TransactionStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -18,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class TransactionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,13 +25,13 @@ public class TransactionEntity extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<InputValue> inputValues;
 
-    @Column(precision = 30, scale = 0)
+    @Column(precision = 30, scale = 10)
     private BigDecimal amount;
 
-    @Column(precision = 30, scale = 0)
+    @Column(precision = 30, scale = 10)
     private BigDecimal cashback;
 
-    @Column(precision = 30, scale = 0)
+    @Column(precision = 30, scale = 10)
     private BigDecimal commission;
 
     @Enumerated(EnumType.STRING)

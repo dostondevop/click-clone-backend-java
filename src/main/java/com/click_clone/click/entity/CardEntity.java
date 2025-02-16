@@ -38,7 +38,9 @@ public class  CardEntity extends BaseEntity {
     @ManyToOne
     private AttachmentEntity cardTypeImage;
 
+    @Builder.Default
     private boolean considerInTotalBalance = true;
+    @Builder.Default
     private boolean monitoring = false;
 
     @Enumerated(EnumType.STRING)
@@ -46,8 +48,10 @@ public class  CardEntity extends BaseEntity {
     private CardType cardType;
 
     @Column(precision = 30, scale = 10, nullable = false)
-    private BigDecimal balance = BigDecimal.valueOf(0L);
+    @Builder.Default
+    private BigDecimal balance = BigDecimal.ZERO;
 
+    @Builder.Default
     private boolean main = false;
 
     @Enumerated(EnumType.STRING)
@@ -57,11 +61,4 @@ public class  CardEntity extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private UserEntity user;
-
-    @PrePersist
-    public void setDefaultBalance() {
-        if (balance == null) {
-            balance = BigDecimal.ZERO;
-        }
-    }
 }

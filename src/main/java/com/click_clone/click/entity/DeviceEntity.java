@@ -21,6 +21,5 @@ public class DeviceEntity extends BaseEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
     private UserEntity user;
 }

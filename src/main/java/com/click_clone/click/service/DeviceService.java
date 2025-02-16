@@ -29,10 +29,22 @@ public class DeviceService {
     }
 
     public void deleteAllUserDevices() {
-        deviceRepository.deleteAllByUser_Id(userService.getCurrentUser().getId());
+        List<DeviceEntity> devices = deviceRepository
+                .findAllByUser_Id(userService.getCurrentUser().getId());
+
+        devices.forEach(this::deleteDevice);
     }
 
     public void deleteUserDevice(UUID id) {
-        deviceRepository.deleteById(id);
+        DeviceEntity deviceEntity = deviceRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Device not found."));
+
+        deleteDevice(deviceEntity);
+    }
+
+    private void deleteDevice(DeviceEntity device) {
+        device.setUser(null);
+        deviceRepository.save(device);
+        deviceRepository.delete(device);
     }
 }

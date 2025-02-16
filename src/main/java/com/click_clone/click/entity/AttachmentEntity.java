@@ -21,6 +21,7 @@ public class AttachmentEntity {
     @Column(nullable = false)
     private long size;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AttachmentType attachmentType;
     @Column(nullable = false)
     private byte[] content;

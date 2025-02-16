@@ -3,10 +3,7 @@ package com.click_clone.click.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SelectItemEntity {
 
     @Id
@@ -32,6 +30,7 @@ public class SelectItemEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @Builder.Default
     private List<ServiceSerialNumberEntity> serviceSerialNumbers = new ArrayList<>();
 
     @ManyToOne

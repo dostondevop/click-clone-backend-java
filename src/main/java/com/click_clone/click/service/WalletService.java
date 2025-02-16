@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -22,15 +23,13 @@ public class WalletService {
     private final AttachmentRepository attachmentRepository;
     private final Random random;
 
-    private static final String DEFAULT_WALLET_IMAGE_URL = "/static/image/WALLET.png";
+    private static final String DEFAULT_WALLET_IMAGE_URL = "/static/image/";
+    private static final String DEFAULT_WALLET_IMAGE_NAME = "WALLET.png";
     private static final String DEFAULT_WALLET_START_NUMBERS = "8800";
 
     @Async
     public void createWallet(UserEntity user) throws IOException {
-        AttachmentEntity attachment = AttachmentUtil
-                .buildAttachmentFromDefaultImage(DEFAULT_WALLET_IMAGE_URL);
-
-        AttachmentEntity save = attachmentRepository.save(attachment);
+        AttachmentEntity save = attachmentRepository.save(getAttachment());
 
         CardEntity card = CardEntity.builder()
                 .cardName("Click wallet")
@@ -40,9 +39,19 @@ public class WalletService {
                 .expiryDate("unlimited")
                 .cardNumber(generateWalletNumber())
                 .user(user)
+                .considerInTotalBalance(true)
                 .build();
 
         cardRepository.save(card);
+    }
+
+    private AttachmentEntity getAttachment() throws IOException {
+        Optional<AttachmentEntity> byName = attachmentRepository.findByName(DEFAULT_WALLET_IMAGE_NAME);
+        if (byName.isEmpty()) {
+            return AttachmentUtil
+                    .buildAttachmentFromDefaultImage(DEFAULT_WALLET_IMAGE_URL + DEFAULT_WALLET_IMAGE_NAME);
+        }
+        return byName.get();
     }
 
     private String generateWalletNumber() {

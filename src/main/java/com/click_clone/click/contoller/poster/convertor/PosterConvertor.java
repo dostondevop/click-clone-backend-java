@@ -2,6 +2,7 @@ package com.click_clone.click.contoller.poster.convertor;
 
 import com.click_clone.click.contoller.poster.dto.PosterCreateRequestDto;
 import com.click_clone.click.contoller.poster.dto.PosterResponseDto;
+import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.PosterEntity;
 import com.click_clone.click.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,11 +31,18 @@ public class PosterConvertor {
                 .content(poster.getContent())
                 .viewersCount(poster.getViewers().size())
                 .likedUsersCount(poster.getLikedPeople().size())
-                .attachmentId(poster.getImageAttachment().getId())
+                .attachmentId(getPosterImageId(poster.getImageAttachment()))
                 .createdAt(poster.getCreatedAt())
                 .viewedByCurrentUser(isViewer(poster.getViewers()))
                 .likedByCurrentUser(isLikedPeople(poster.getLikedPeople()))
                 .build();
+    }
+
+    private UUID getPosterImageId(AttachmentEntity image) {
+        if (image == null) {
+            return null;
+        }
+        return image.getId();
     }
 
     public List<PosterResponseDto> posterListToDtoList(List<PosterEntity> posters) {

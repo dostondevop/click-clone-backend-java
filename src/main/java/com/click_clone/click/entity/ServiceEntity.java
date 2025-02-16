@@ -1,10 +1,7 @@
 package com.click_clone.click.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class ServiceEntity extends BaseEntity {
 
     @Id
@@ -27,6 +25,7 @@ public class ServiceEntity extends BaseEntity {
     private double cashback = 0;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @Builder.Default
     private List<InputEntity> inputs = new ArrayList<>();
 
     @ManyToOne

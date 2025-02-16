@@ -51,6 +51,7 @@ public class CardConvertor {
                 .cardName(card.getCardName())
                 .expiryDate(card.getExpiryDate())
                 .bankImageId(card.getBankImage().getId())
+                .cardTypeImageId(card.getCardTypeImage().getId())
                 .balance(card.getBalance().toString())
                 .main(card.isMain())
                 .currencyType(card.getCurrencyType().toString())

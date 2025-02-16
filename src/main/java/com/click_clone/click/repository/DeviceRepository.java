@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface DeviceRepository extends JpaRepository<DeviceEntity, UUID> {
     List<DeviceEntity> findAllByUser_Id(UUID userId);
-    boolean deleteAllByUser_Id(UUID userId);
 }

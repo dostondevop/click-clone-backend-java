@@ -3,10 +3,7 @@ package com.click_clone.click.entity;
 import com.click_clone.click.entity.enums.InputType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class InputEntity {
 
     @Id
@@ -29,9 +27,11 @@ public class InputEntity {
     private String placeholder;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private InputType inputType;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
+    @Builder.Default
     private List<SelectItemEntity> selectItems = new ArrayList<>();
 }

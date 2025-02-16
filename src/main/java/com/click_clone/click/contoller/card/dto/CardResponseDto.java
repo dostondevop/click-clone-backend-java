@@ -17,6 +17,7 @@ public class CardResponseDto {
     private String expiryDate;
     private String cardName;
     private UUID bankImageId;
+    private UUID cardTypeImageId;
     private String balance;
     private boolean main;
     private String currencyType;

@@ -2,10 +2,7 @@ package com.click_clone.click.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -16,6 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class HomeEntity extends BaseEntity {
 
     @Id
@@ -27,5 +25,6 @@ public class HomeEntity extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "home")
     @JsonManagedReference
+    @Builder.Default
     private List<FavoriteEntity> favoriteList = new ArrayList<>();
 }

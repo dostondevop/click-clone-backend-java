@@ -3,13 +3,9 @@ package com.click_clone.click.entity;
 import com.click_clone.click.entity.enums.AutoPayType;
 import com.click_clone.click.entity.enums.DayOfWeek;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +14,7 @@ import java.util.UUID;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class AutoPaymentEntity extends BaseEntity {
 
     @Id
@@ -25,8 +22,10 @@ public class AutoPaymentEntity extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AutoPayType autoPayType;
 
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
     private int day;
 

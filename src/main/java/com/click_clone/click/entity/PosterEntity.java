@@ -25,6 +25,7 @@ public class PosterEntity extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
+    @Builder.Default
     private boolean active = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -33,6 +34,7 @@ public class PosterEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "news_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @Builder.Default
     private List<UserEntity> viewers = new ArrayList<>();;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -41,9 +43,9 @@ public class PosterEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "news_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @Builder.Default
     private List<UserEntity> likedPeople = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, unique = true)
     private AttachmentEntity imageAttachment;
 }
