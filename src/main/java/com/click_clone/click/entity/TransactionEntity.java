@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
@@ -27,13 +28,13 @@ public class TransactionEntity extends BaseEntity {
     private List<InputValue> inputValues;
 
     @Column(precision = 30, scale = 0)
-    private BigInteger amount;
+    private BigDecimal amount;
 
     @Column(precision = 30, scale = 0)
-    private BigInteger cashback;
+    private BigDecimal cashback;
 
     @Column(precision = 30, scale = 0)
-    private BigInteger commission;
+    private BigDecimal commission;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

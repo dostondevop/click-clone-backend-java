@@ -2,13 +2,16 @@ package com.click_clone.click.service;
 
 import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.CardEntity;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.entity.enums.CardType;
 import com.click_clone.click.entity.enums.CurrencyType;
 import com.click_clone.click.exception.RecordNotFoundException;
+import com.click_clone.click.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.click_clone.click.repository.CardRepository;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +20,8 @@ import java.util.UUID;
 public class CardService {
     private final CardRepository cardRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final CurrencyService currencyService;
 
     public List<CardEntity> getCardList() {
         return cardRepository
@@ -35,23 +40,31 @@ public class CardService {
 
     public String getTotalBalance() {
         List<CardEntity> cardEntities = cardRepository
-                .findAllByConsiderInTotalBalanceIsTrueAndCurrencyType(CurrencyType.UZS);
-        BigInteger sum = cardEntities.stream().map(CardEntity::getBalance)
-                .reduce(BigInteger.ZERO, BigInteger::add);
+                .findAllByConsiderInTotalBalanceIsTrue();
+        BigDecimal sum = cardEntities.stream().map(this::getCardBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return convertBigIntToString(sum);
+        return sum.toString();
+    }
+
+    private BigDecimal getCardBalance(CardEntity card) {
+        if (card.getCurrencyType().equals(CurrencyType.USD)) {
+            return currencyService.getExchangedRateAsBigDecimal().multiply(card.getBalance());
+        }
+        return card.getBalance();
     }
 
     public CardEntity create(CardEntity card) {
+        card.setConsiderInTotalBalance(true);
         return cardRepository.save(card);
     }
 
-    public CardEntity addImageTo(UUID id, AttachmentEntity image) {
-        CardEntity cardEntity = cardRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
-        cardEntity.setBankImage(image);
-        return cardRepository.save(cardEntity);
-    }
+//    public CardEntity addImageTo(UUID id, AttachmentEntity image) {
+//        CardEntity cardEntity = cardRepository.findById(id)
+//                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
+//        cardEntity.setBankImage(image);
+//        return cardRepository.save(cardEntity);
+//    }
 
     public CardEntity updateCard(UUID id,
                            String cardName,
@@ -68,16 +81,11 @@ public class CardService {
     }
 
     public void deleteCard(UUID cardId) {
-        cardRepository.deleteById(cardId);
-    }
+        CardEntity card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
 
-    private String convertBigIntToString(BigInteger balance) {
-        String sumString = balance.toString();
-        if (sumString.length() <= 3) {
-            return "0," + sumString;
-        }
-        int length = sumString.length();
-        return sumString.substring(0, length - 3) + "," +
-                sumString.substring(length - 3);
+        UserEntity user = userService.getCurrentUser();
+        user.getCards().remove(card);
+        userRepository.save(user);
     }
 }

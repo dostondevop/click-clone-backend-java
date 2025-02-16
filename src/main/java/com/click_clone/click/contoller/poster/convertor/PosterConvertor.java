@@ -4,29 +4,43 @@ import com.click_clone.click.contoller.poster.dto.PosterCreateRequestDto;
 import com.click_clone.click.contoller.poster.dto.PosterResponseDto;
 import com.click_clone.click.entity.PosterEntity;
 import com.click_clone.click.entity.UserEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public interface PosterConvertor {
+@Component
+@RequiredArgsConstructor
+public class PosterConvertor {
 
-    PosterEntity dtoToPoster(PosterCreateRequestDto posterRequestDto);
+    public PosterEntity dtoToPoster(PosterCreateRequestDto posterRequestDto) {
+        return PosterEntity.builder()
+                .title(posterRequestDto.getTitle())
+                .content(posterRequestDto.getContent())
+                .build();
+    }
 
-    @Mapping(target = "viewersCount", expression = "java(poster.getViewers().size())")
-    @Mapping(target = "likedUsersCount", expression = "java(poster.getLikedPeople().size())")
-    @Mapping(target = "attachmentId", expression = "java(poster.getImageAttachment().getId())")
-    @Mapping(target = "likedByCurrentUser", source = "likedPeople", qualifiedByName = "isLikedPeople")
-    @Mapping(target = "viewedByCurrentUser", source = "viewers", qualifiedByName = "isViewer")
-    PosterResponseDto entityToDto(PosterEntity poster);
+    public PosterResponseDto entityToDto(PosterEntity poster) {
+        return PosterResponseDto.builder()
+                .id(poster.getId())
+                .title(poster.getTitle())
+                .content(poster.getContent())
+                .viewersCount(poster.getViewers().size())
+                .likedUsersCount(poster.getLikedPeople().size())
+                .attachmentId(poster.getImageAttachment().getId())
+                .createdAt(poster.getCreatedAt())
+                .viewedByCurrentUser(isViewer(poster.getViewers()))
+                .likedByCurrentUser(isLikedPeople(poster.getLikedPeople()))
+                .build();
+    }
 
-    List<PosterResponseDto> posterListToDtoList(List<PosterEntity> posters);
+    public List<PosterResponseDto> posterListToDtoList(List<PosterEntity> posters) {
+        return posters.stream().map(this::entityToDto).collect(Collectors.toList());
+    }
 
-    @Named("isViewer")
-    default boolean isViewer(List<UserEntity> viewers) {
+    private boolean isViewer(List<UserEntity> viewers) {
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
         for (UserEntity user: viewers) {
             if (user.getPhoneNumber().equals(phoneNumber)) {
@@ -36,8 +50,7 @@ public interface PosterConvertor {
         return false;
     }
 
-    @Named("isLikedPeople")
-    default boolean isLikedPeople(List<UserEntity> likedPeople) {
+    private boolean isLikedPeople(List<UserEntity> likedPeople) {
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
         for (UserEntity user: likedPeople) {
             if (user.getPhoneNumber().equals(phoneNumber)) {

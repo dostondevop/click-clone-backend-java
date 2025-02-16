@@ -5,25 +5,33 @@ import com.click_clone.click.contoller.device.dto.UserDeviceResponseDto;
 import com.click_clone.click.entity.DeviceEntity;
 import com.click_clone.click.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public abstract class DeviceConvertor {
-    @Autowired
-    private UserService userService;
+@Component
+@RequiredArgsConstructor
+public class DeviceConvertor {
+    private final UserService userService;
 
-    public abstract UserDeviceResponseDto deviceToDto(DeviceEntity device);
+    public UserDeviceResponseDto deviceToDto(DeviceEntity device) {
+        return UserDeviceResponseDto.builder()
+                .id(device.getId())
+                .name(device.getName())
+                .createdAt(device.getCreatedAt())
+                .updatedAt(device.getUpdatedAt())
+                .build();
+    }
 
-    public abstract List<UserDeviceResponseDto> deviceListToDtoList(List<DeviceEntity> devices);
+    public List<UserDeviceResponseDto> deviceListToDtoList(List<DeviceEntity> devices) {
+        return devices.stream().map(this::deviceToDto).collect(Collectors.toList());
+    }
 
-    public abstract DeviceEntity dtoToDevice(UserDeviceCreateRequestDto request);
-
-    @AfterMapping
-    protected void setUser(DeviceEntity device) {
-        device.setUser(userService.getCurrentUser());
+    public DeviceEntity dtoToDevice(UserDeviceCreateRequestDto request) {
+        return DeviceEntity.builder()
+                .name(request.getName())
+                .user(userService.getCurrentUser())
+                .build();
     }
 }

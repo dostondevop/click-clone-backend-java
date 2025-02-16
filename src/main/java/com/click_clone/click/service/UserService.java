@@ -28,6 +28,10 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     public UserEntity create(UserEntity user) {
+        RoleEntity role = roleRepository.findByRole(UserRole.UNCOMPLETED)
+                .orElseThrow(() -> new RecordNotFoundException("Role not found."));
+        user.setRole(role);
+
         return userRepository.save(user);
     }
 

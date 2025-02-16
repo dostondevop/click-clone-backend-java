@@ -8,8 +8,9 @@ import com.click_clone.click.contoller.card.dto.CardUpdateRequestDto;
 import com.click_clone.click.contoller.convertor.AttachmentConvertor;
 import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.CardEntity;
+import com.click_clone.click.repository.AttachmentRepository;
 import com.click_clone.click.service.CardService;
-import com.click_clone.click.service.CurrencyService;
+import com.click_clone.click.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,6 @@ import java.util.UUID;
 public class CardController {
     private final CardService cardService;
     private final CardConvertor cardConvertor;
-    private final CurrencyService currencyService;
 
     @GetMapping
     public List<CardResponseDto> getUserCards() {
@@ -33,13 +33,13 @@ public class CardController {
     }
 
     @GetMapping("/{cardId}")
-    public CardResponseDto getUserCard(@PathVariable UUID cardId) throws IOException {
+    public CardResponseDto getUserCard(@PathVariable UUID cardId) {
         CardEntity card = cardService.getCard(cardId);
         return cardConvertor.cardToDto(card);
     }
 
     @GetMapping("/main")
-    public CardResponseDto getUserMainCard() throws IOException {
+    public CardResponseDto getUserMainCard() {
         CardEntity mainCard = cardService.getMainCard();
         return cardConvertor.cardToDto(mainCard);
     }
@@ -56,16 +56,16 @@ public class CardController {
         return cardConvertor.cardToDto(card);
     }
 
-    @PutMapping("/image")
-    public CardResponseDto addImageToCard(@RequestParam("cardId") UUID id,
-                               @RequestParam("file")MultipartFile file) throws IOException {
-        AttachmentEntity attachment = AttachmentConvertor.convertToEntity(file);
-        CardEntity card = cardService.addImageTo(id, attachment);
-        return cardConvertor.cardToDto(card);
-    }
+//    @PutMapping("/image")
+//    public CardResponseDto addImageToCard(@RequestParam("cardId") UUID id,
+//                               @RequestParam("file")MultipartFile file) throws IOException {
+//        AttachmentEntity attachment = AttachmentConvertor.convertToEntity(file);
+//        CardEntity card = cardService.addImageTo(id, attachment);
+//        return cardConvertor.cardToDto(card);
+//    }
 
     @PutMapping
-    public CardResponseDto updateCard(@RequestBody CardUpdateRequestDto request) throws IOException {
+    public CardResponseDto updateCard(@RequestBody CardUpdateRequestDto request) {
         CardEntity card = cardService.updateCard(request.getId(), request.getCardName(),
                 request.isConsiderInTotalBalance(),
                 request.isMonitoring());
@@ -77,8 +77,8 @@ public class CardController {
         cardService.deleteCard(request.getCardId());
     }
 
-    @GetMapping("/currency")
-    public Object getCurrency() {
-        return currencyService.getExchangeRate();
-    }
+//    @GetMapping("/currency")
+//    public Double getCurrency() {
+//        return currencyService.getExchangeRate();
+//    }
 }

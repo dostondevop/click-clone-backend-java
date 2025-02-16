@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
@@ -44,8 +45,8 @@ public class  CardEntity extends BaseEntity {
     @Column(nullable = false)
     private CardType cardType;
 
-    @Column(precision = 30, scale = 0)
-    private BigInteger balance = BigInteger.valueOf(0);
+    @Column(precision = 30, scale = 10, nullable = false)
+    private BigDecimal balance = BigDecimal.valueOf(0L);
 
     private boolean main = false;
 
@@ -56,4 +57,11 @@ public class  CardEntity extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private UserEntity user;
+
+    @PrePersist
+    public void setDefaultBalance() {
+        if (balance == null) {
+            balance = BigDecimal.ZERO;
+        }
+    }
 }

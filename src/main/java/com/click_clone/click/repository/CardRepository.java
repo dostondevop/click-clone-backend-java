@@ -13,6 +13,6 @@ import java.util.List;
 public interface CardRepository extends JpaRepository<CardEntity, UUID> {
     List<CardEntity> findAllByUser_Id(UUID userId);
     Optional<CardEntity> findByUser_IdAndMainIsTrue(UUID userId);
-    List<CardEntity> findAllByConsiderInTotalBalanceIsTrueAndCurrencyType(CurrencyType type);
+    List<CardEntity> findAllByConsiderInTotalBalanceIsTrue();
     boolean existsByCardName(String cardNumber);
 }

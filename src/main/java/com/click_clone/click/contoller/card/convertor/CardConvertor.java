@@ -10,24 +10,19 @@ import com.click_clone.click.repository.AttachmentRepository;
 import com.click_clone.click.service.UserService;
 import com.click_clone.click.service.util.AttachmentUtil;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-public abstract class CardConvertor {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private AttachmentRepository attachmentRepository;
+@Component
+@RequiredArgsConstructor
+public class CardConvertor {
+    private final UserService userService;
+    private final AttachmentRepository attachmentRepository;
 
     private static final String DEFAULT_IMAGE_URL = "/static/image/";
 
@@ -49,60 +44,73 @@ public abstract class CardConvertor {
             CardType.VISA, CurrencyType.USD
     );
 
-    @Mapping(target = "bankImageId", expression = "java(card.getBankImage().getId())")
-    @Mapping(target = "balance", source = "balance", qualifiedByName = "convertBalance")
-    @Mapping(target = "currencyType", expression = "java(card.getCardType().getName())")
-    public abstract CardResponseDto cardToDto(CardEntity card) throws IOException;
-
-    public abstract List<CardResponseDto> cardListToDtoList(List<CardEntity> cardEntityList);
-
-    @Named("convertBalance")
-    protected String convertBalance(BigInteger balance) {
-        String balanceString = balance.toString();
-        int length = balanceString.length();
-        return balanceString.substring(0, length - 3) + "," + balanceString.substring(length - 3);
+    public CardResponseDto cardToDto(CardEntity card) {
+        return CardResponseDto.builder()
+                .id(card.getId())
+                .cardNumber(card.getCardNumber())
+                .cardName(card.getCardName())
+                .expiryDate(card.getExpiryDate())
+                .bankImageId(card.getBankImage().getId())
+                .balance(card.getBalance().toString())
+                .main(card.isMain())
+                .currencyType(card.getCurrencyType().toString())
+                .considerInTotalBalance(card.isConsiderInTotalBalance())
+                .monitoring(card.isMonitoring())
+                .build();
     }
 
-    @Mapping(target = "bankImage", source = "bankName", qualifiedByName = "setBankImage")
-    public abstract CardEntity dtoToCard(CardCreateRequestDto request);
+    public List<CardResponseDto> cardListToDtoList(List<CardEntity> cardEntityList) {
+        return cardEntityList.stream().map(this::cardToDto).collect(Collectors.toList());
+    }
 
-    @Named("setBankImage")
+    public CardEntity dtoToCard(CardCreateRequestDto request) throws IOException {
+        CardEntity card = CardEntity.builder()
+                .cardNumber(request.getCardNumber())
+                .expiryDate(request.getExpiryDate())
+                .bankImage(setBankImage(request.getBankName()))
+                .cardName(request.getCardName())
+                .main(request.isMain())
+                .build();
+
+        addUserToEntity(card);
+        return card;
+    }
+
     protected AttachmentEntity setBankImage(String bankName) throws IOException {
         Optional<AttachmentEntity> byName = attachmentRepository.findByName(bankName);
 
         if (byName.isEmpty()) {
-            return AttachmentUtil
+            AttachmentEntity attachment = AttachmentUtil
                     .buildAttachmentFromDefaultImage(DEFAULT_IMAGE_URL + bankName + ".png");
+            return attachmentRepository.save(attachment);
         }
 
         return byName.get();
     }
 
-    @AfterMapping
-    protected void addUserToEntity(CardEntity card) throws IOException {
+    private void addUserToEntity(CardEntity card) {
         card.setUser(userService.getCurrentUser());
         setCardType(card);
         setCardTypeImage(card);
     }
 
-    protected void setCardType(CardEntity card) {
+    private void setCardType(CardEntity card) {
         String substring = card.getCardNumber().substring(0, 4);
         card.setCardType(cardTypeMap.get(substring));
         card.setCurrencyType(currencyTypeMap.get(card.getCardType()));
     }
 
-    protected void setCardTypeImage(CardEntity card) throws IOException {
+    private void setCardTypeImage(CardEntity card) {
         String cardTypeName = card.getCardType().toString();
-        Optional<AttachmentEntity> byName = attachmentRepository.findByName(cardTypeName);
-
-        AttachmentEntity attachment;
-        if (byName.isEmpty()) {
-             attachment = AttachmentUtil
-                    .buildAttachmentFromDefaultImage(DEFAULT_IMAGE_URL + cardTypeName + ".png");
-        } else {
-            attachment = byName.get();
-        }
-
+        AttachmentEntity attachment = attachmentRepository.findByName(cardTypeName)
+                .orElseGet(() -> {
+                    try {
+                        AttachmentEntity attachment1 = AttachmentUtil.buildAttachmentFromDefaultImage(DEFAULT_IMAGE_URL + cardTypeName + ".png");
+                        return attachmentRepository.save(attachment1);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         card.setCardTypeImage(attachment);
     }
 }

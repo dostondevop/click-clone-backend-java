@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class AutoPaymentEntity extends BaseEntity {
     private String time;
 
     @Column(nullable = false, precision = 30, scale = 0)
-    private BigInteger amount;
+    private BigDecimal amount;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<InputValue> inputValues;

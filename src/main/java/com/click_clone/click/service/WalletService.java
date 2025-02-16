@@ -5,6 +5,7 @@ import com.click_clone.click.entity.CardEntity;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.entity.enums.CardType;
 import com.click_clone.click.entity.enums.CurrencyType;
+import com.click_clone.click.repository.AttachmentRepository;
 import com.click_clone.click.repository.CardRepository;
 import com.click_clone.click.service.util.AttachmentUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class WalletService {
     private final CardRepository cardRepository;
+    private final AttachmentRepository attachmentRepository;
     private final Random random;
 
     private static final String DEFAULT_WALLET_IMAGE_URL = "/static/image/WALLET.png";
@@ -28,10 +30,12 @@ public class WalletService {
         AttachmentEntity attachment = AttachmentUtil
                 .buildAttachmentFromDefaultImage(DEFAULT_WALLET_IMAGE_URL);
 
+        AttachmentEntity save = attachmentRepository.save(attachment);
+
         CardEntity card = CardEntity.builder()
                 .cardName("Click wallet")
                 .cardType(CardType.WALLET)
-                .bankImage(attachment)
+                .bankImage(save)
                 .currencyType(CurrencyType.UZS)
                 .expiryDate("unlimited")
                 .cardNumber(generateWalletNumber())
