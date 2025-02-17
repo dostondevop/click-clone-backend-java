@@ -7,8 +7,10 @@ import com.click_clone.click.entity.enums.UserRole;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.RoleRepository;
 import com.click_clone.click.repository.UserRepository;
+import com.click_clone.click.service.util.RandomNumberGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,17 @@ public class UserService {
     private final WalletService walletService;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
+    private final OtpEmailService emailService;
 
     public UserEntity create(UserEntity user) {
         RoleEntity role = roleRepository.findByRole(UserRole.UNCOMPLETED)
                 .orElseThrow(() -> new RecordNotFoundException("Role not found."));
         user.setRole(role);
 
+        emailService.sendSimpleEmail(user.getEmail(), "Verification Code", "Attention! The code grants the right to spend your money!\n" +
+                "DO NOT SHARE the code with ANYONE (CLICK employees will NEVER ask for it).\n" +
+                "Beware of fraudsters!\n" +
+                "Code:" + RandomNumberGenerator.generateSixDigitNumber(100000, 900000));
         return userRepository.save(user);
     }
 
