@@ -12,4 +12,8 @@ import java.util.UUID;
 public class UserPasswordRequestDto {
     private UUID userId;
     private String password;
+    private String osName;
+    private String ipAddress;
+    private String deviceType;
+    private String browserNameAndVersion;
 }

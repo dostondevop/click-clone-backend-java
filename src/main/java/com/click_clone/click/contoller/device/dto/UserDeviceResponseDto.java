@@ -14,7 +14,10 @@ import java.util.UUID;
 @Builder
 public class UserDeviceResponseDto {
     private UUID id;
-    private String name;
+    private String osName;
+    private String ipAddress;
+    private String deviceType;
+    private String browserNameAndVersion;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

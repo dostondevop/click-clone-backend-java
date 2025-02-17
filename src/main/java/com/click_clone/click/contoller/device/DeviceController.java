@@ -1,7 +1,6 @@
 package com.click_clone.click.contoller.device;
 
 import com.click_clone.click.contoller.device.convertor.DeviceConvertor;
-import com.click_clone.click.contoller.device.dto.UserDeviceCreateRequestDto;
 import com.click_clone.click.contoller.device.dto.UserDeviceDeleteRequestDto;
 import com.click_clone.click.contoller.device.dto.UserDeviceResponseDto;
 import com.click_clone.click.entity.DeviceEntity;
@@ -28,13 +27,6 @@ public class DeviceController {
     @GetMapping("/{deviceId}")
     public UserDeviceResponseDto getDeviceByDeviceId(@PathVariable UUID deviceId) {
         DeviceEntity device = deviceService.getDevice(deviceId);
-        return deviceConvertor.deviceToDto(device);
-    }
-
-    @PostMapping
-    public UserDeviceResponseDto createDevice(@RequestBody UserDeviceCreateRequestDto request) {
-        DeviceEntity deviceEntity = deviceConvertor.dtoToDevice(request);
-        DeviceEntity device = deviceService.create(deviceEntity);
         return deviceConvertor.deviceToDto(device);
     }
 

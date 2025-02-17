@@ -2,6 +2,7 @@ package com.click_clone.click.service;
 
 import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.PosterEntity;
+import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.PosterRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,17 +59,24 @@ public class PosterService {
         return posterRepository.save(poster);
     }
 
-    public PosterEntity pressALike(UUID id) {
+    public PosterEntity likePoster(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
-        poster.getLikedPeople().add(userService.getCurrentUser());
+
+        UserEntity user = userService.getCurrentUser();
+        if (!poster.getLikedPeople().contains(user)) {
+            return pressALike(poster, user);
+        }
+        return getLikeBack(poster, user);
+    }
+
+    private PosterEntity pressALike(PosterEntity poster, UserEntity user) {
+        poster.getLikedPeople().add(user);
         return posterRepository.save(poster);
     }
 
-    public PosterEntity getLikeBack(UUID id) {
-        PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
-        poster.getLikedPeople().remove(userService.getCurrentUser());
+    private PosterEntity getLikeBack(PosterEntity poster, UserEntity user) {
+        poster.getLikedPeople().remove(user);
         return posterRepository.save(poster);
     }
 

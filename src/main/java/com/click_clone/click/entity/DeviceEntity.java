@@ -1,5 +1,6 @@
 package com.click_clone.click.entity;
 
+import com.click_clone.click.entity.enums.DeviceType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +19,13 @@ public class DeviceEntity extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String name;
+    private String operationSystemName;
+
+    private String ipAddress;
+
+    private DeviceType type;
+
+    private String browserName;
 
     @ManyToOne
     private UserEntity user;

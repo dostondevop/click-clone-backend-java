@@ -66,13 +66,7 @@ public class PosterController {
 
     @PutMapping("/liked")
     public PosterResponseDto pressALike(@RequestBody PosterIdRequestDto request) {
-        PosterEntity poster = posterService.pressALike(request.getId());
-        return posterConvertor.entityToDto(poster);
-    }
-
-    @PutMapping("/unliked")
-    public PosterResponseDto getLikeBack(@RequestBody PosterIdRequestDto request) {
-        PosterEntity poster = posterService.getLikeBack(request.getId());
+        PosterEntity poster = posterService.likePoster(request.getId());
         return posterConvertor.entityToDto(poster);
     }
 

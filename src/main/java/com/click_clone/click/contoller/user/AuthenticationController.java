@@ -1,18 +1,19 @@
 package com.click_clone.click.contoller.user;
 
+import com.click_clone.click.contoller.device.convertor.DeviceConvertor;
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
 import com.click_clone.click.contoller.user.convertor.UserAuthConverter;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateRequestDto;
-import com.click_clone.click.contoller.user.dto.authentication.UserLoginRequestDto;
+import com.click_clone.click.contoller.user.dto.authentication.UserCreateResponseDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserPasswordRequestDto;
+import com.click_clone.click.entity.DeviceEntity;
 import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.DeviceService;
 import com.click_clone.click.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,11 +21,16 @@ import java.util.UUID;
 public class AuthenticationController {
     private final UserService userService;
     private final UserAuthConverter userConverter;
+    private final DeviceService deviceService;
+    private final DeviceConvertor deviceConvertor;
 
-    @PostMapping("/register")
-    public UUID register(@RequestBody UserCreateRequestDto request) {
+    @PostMapping
+    public UserCreateResponseDto register(@RequestBody UserCreateRequestDto request) {
         UserEntity userEntity = userConverter.dtoToUser(request);
-        return userService.create(userEntity).getId();
+        UserEntity user = userService.checkExistenceUser(userEntity);
+        DeviceEntity deviceEntity = deviceConvertor.dtoToDevice(request);
+        boolean checked = deviceService.checkExistenceDevice(user.getId(), deviceEntity);
+        return userConverter.userToDto(user, checked);
     }
 
 //    @PostMapping("/confirm")
@@ -32,13 +38,10 @@ public class AuthenticationController {
 //
 //    }
 
-    @PutMapping("/register")
-    public void register(@RequestBody UserPasswordRequestDto request) throws IOException {
-        userService.update(request.getUserId(), request.getPassword());
-    }
-
-    @PostMapping("/login")
-    public JwtResponseDto login(@RequestBody UserLoginRequestDto request) throws JsonProcessingException {
-        return userService.login(request.getPhoneNumber(), request.getPassword());
+    @PutMapping
+    public JwtResponseDto register(@RequestBody UserPasswordRequestDto request) throws IOException {
+        DeviceEntity deviceEntity = deviceConvertor.dtoToDevice(request);
+        deviceService.createDevice(request.getUserId(), deviceEntity);
+        return userService.auth(request.getUserId(), request.getPassword());
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,7 +28,19 @@ public class UserService {
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
 
-    public UserEntity create(UserEntity user) {
+    public UserEntity getUserById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("User not found."));
+    }
+
+    public UserEntity checkExistenceUser(UserEntity user) {
+        Optional<UserEntity> userEntity = userRepository
+                .findByPhoneNumber(user.getPhoneNumber());
+
+        return userEntity.orElseGet(() -> create(user));
+    }
+
+    private UserEntity create(UserEntity user) {
         RoleEntity role = roleRepository.findByRole(UserRole.UNCOMPLETED)
                 .orElseThrow(() -> new RecordNotFoundException("Role not found."));
         user.setRole(role);
@@ -35,32 +48,38 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
-    public void update(UUID userId, String password) throws IOException {
+    public JwtResponseDto auth(UUID userId, String password) throws IOException {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RecordNotFoundException("User not found"));
 
+        UserEntity user;
+        if (userEntity.getPassword() == null) {
+            user = setPassword(userEntity, password);
+        } else {
+            user = checkPassword(userEntity, password);
+        }
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        return new JwtResponseDto("Bearer " + accessToken, refreshToken);
+    }
+
+    private UserEntity setPassword(UserEntity userEntity, String password) throws IOException {
         RoleEntity role = roleRepository.findByRole(UserRole.UNIDENTIFIED)
                 .orElseThrow(() -> new RecordNotFoundException("Role not found."));
         userEntity.setRole(role);
 
         userEntity.setPassword(passwordEncoder.encode(password));
-        userRepository.save(userEntity);
         walletService.createWallet(userEntity);
+        return userRepository.save(userEntity);
     }
 
-    public JwtResponseDto login(String phoneNumber, String password) throws JsonProcessingException {
-        UserEntity userEntity = userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new IllegalArgumentException("This phone number  " + phoneNumber + " does not exist."));
-
+    private UserEntity checkPassword(UserEntity userEntity, String password) {
         boolean matches = passwordEncoder.matches(password, userEntity.getPassword());
         if (!matches) {
             throw new IllegalArgumentException("The Password is incorrect.");
         }
-
-        String accessToken = jwtService.generateAccessToken(userEntity);
-        String refreshToken = jwtService.generateRefreshToken(userEntity);
-        return new JwtResponseDto("Bearer " + accessToken, refreshToken);
+        return userEntity;
     }
 
     public UserEntity getCurrentUser() {

@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class UserCreateRequestDto {
     private String phoneNumber;
     private String email;
+    private String osName;
+    private String ipAddress;
+    private String deviceType;
+    private String browserNameAndVersion;
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,8 +25,18 @@ public class DeviceService {
                 .orElseThrow(() -> new RecordNotFoundException("Device not found."));
     }
 
-    public DeviceEntity create(DeviceEntity device) {
-        return deviceRepository.save(device);
+    public boolean checkExistenceDevice(UUID userId, DeviceEntity device) {
+        Optional<DeviceEntity> deviceEntity = deviceRepository
+                .findByUser_IdAndBrowserNameAndIpAddressAndOperationSystemNameAndType(userId,
+                        device.getBrowserName(), device.getIpAddress(),
+                        device.getOperationSystemName(), device.getType());
+        return deviceEntity.isPresent();
+    }
+
+    public void createDevice(UUID userId, DeviceEntity device) {
+        if (!checkExistenceDevice(userId, device)) {
+            deviceRepository.save(device);
+        }
     }
 
     public void deleteAllUserDevices() {
