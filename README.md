@@ -1,4 +1,4 @@
- <h1>🚀 Click Clone - The Ultimate Payment(backend side) 💳✨</h1>
+ <h1>🚀 Click-like app - The Ultimate Payment(backend side) 💳✨</h1>
 
 Welcome to the Click Payment App **clone**, a full-fledged backend clone of the popular Click payment system! Built with Java Spring Boot, this application enables seamless and secure payments for various services, money transfers, and online transactions. Whether you need to pay your taxes, utility bills, internet services, or even shop online, this backend powers it all!
 
