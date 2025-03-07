@@ -15,7 +15,7 @@ Welcome to the Click Payment App **clone**, a full-fledged backend clone of the 
 </br>✅ Merchant & Store Payments: Integrated support for online and physical merchants, allowing seamless purchases.
 
 🛠️ <h3>Tech Stack</h3>
-</br>Java, Spring Boot, Spring Security 🔐
+Java, Spring Boot, Spring Security 🔐
 </br>PostgreSQL 🛢️ for reliable data storage
 </br>Redis 🚀 for caching and improving performance
 </br>WebSockets 🌐 for real-time transaction updates
