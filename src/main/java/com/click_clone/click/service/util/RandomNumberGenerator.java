@@ -6,8 +6,9 @@ import java.util.Random;
 
 @UtilityClass
 public class RandomNumberGenerator {
-    public static int generateSixDigitNumber(int minBound, int maxBound) {
-        Random random = new Random();
-        return minBound + random.nextInt(maxBound);
+    private static final Random random = new Random();
+
+    public static int generateOTPCode() {
+        return 100000 + random.nextInt(1000000);
     }
 }

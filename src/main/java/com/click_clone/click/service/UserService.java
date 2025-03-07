@@ -1,23 +1,22 @@
 package com.click_clone.click.service;
 
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
+import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
 import com.click_clone.click.entity.RoleEntity;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.entity.enums.UserRole;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.RoleRepository;
 import com.click_clone.click.repository.UserRepository;
-import com.click_clone.click.service.util.RandomNumberGenerator;
+import com.click_clone.click.service.util.MessageUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -29,17 +28,19 @@ public class UserService {
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
     private final OtpEmailService emailService;
+    private final RedisService redisService;
 
     public UserEntity create(UserEntity user) {
         RoleEntity role = roleRepository.findByRole(UserRole.UNCOMPLETED)
                 .orElseThrow(() -> new RecordNotFoundException("Role not found."));
         user.setRole(role);
 
-        emailService.sendSimpleEmail(user.getEmail(), "Verification Code", "Attention! The code grants the right to spend your money!\n" +
-                "DO NOT SHARE the code with ANYONE (CLICK employees will NEVER ask for it).\n" +
-                "Beware of fraudsters!\n" +
-                "Code:" + RandomNumberGenerator.generateSixDigitNumber(100000, 900000));
-        return userRepository.save(user);
+        UserEntity savedEntity = userRepository.save(user);
+        emailService.sendSimpleEmail(user.getEmail(),
+                MessageUtil.OTP_MESSAGE_TITLE,
+                MessageUtil.OTP_MESSAGE, user.getId());
+
+        return savedEntity;
     }
 
     @Transactional
@@ -111,5 +112,28 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    public UUID confirmOtpCode(AuthenticationCodeRequestDto request) {
+        String otpCodeKey = "OTP_CODE" + request.getUserId();
+        if(!redisService.exists(otpCodeKey)) {
+            throw new IllegalArgumentException("The code is expired.");
+        }
+
+        String savedOtpCode = (String) redisService.get(otpCodeKey);
+
+        if(savedOtpCode == null) {
+            throw new IllegalArgumentException("The code is expired.");
+        }
+
+        if(!savedOtpCode.equals(request.getAuthenticationCode())) {
+            throw new IllegalArgumentException("The code is incorrect.");
+        }
+
+        redisService.delete(otpCodeKey);
+        UserEntity userEntity = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RecordNotFoundException("User not found with the id: " + request.getUserId()));
+
+        return userEntity.getId();
     }
 }
