@@ -1,12 +1,14 @@
 package com.click_clone.click.service;
 
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
+import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
 import com.click_clone.click.entity.RoleEntity;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.entity.enums.UserRole;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.RoleRepository;
 import com.click_clone.click.repository.UserRepository;
+import com.click_clone.click.service.util.MessageUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,8 @@ public class UserService {
     private final WalletService walletService;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
+    private final OtpEmailService emailService;
+    private final RedisService redisService;
 
     public UserEntity getUserById(UUID id) {
         return userRepository.findById(id)
@@ -45,7 +49,12 @@ public class UserService {
                 .orElseThrow(() -> new RecordNotFoundException("Role not found."));
         user.setRole(role);
 
-        return userRepository.save(user);
+        UserEntity savedEntity = userRepository.save(user);
+        emailService.sendSimpleEmail(user.getEmail(),
+                MessageUtil.OTP_MESSAGE_TITLE,
+                MessageUtil.OTP_MESSAGE, user.getId());
+
+        return savedEntity;
     }
 
     public JwtResponseDto auth(UUID userId, String password) throws IOException {
@@ -70,6 +79,7 @@ public class UserService {
         userEntity.setRole(role);
 
         userEntity.setPassword(passwordEncoder.encode(password));
+        userRepository.save(userEntity);
         walletService.createWallet(userEntity);
         return userRepository.save(userEntity);
     }
@@ -123,5 +133,28 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    public UUID confirmOtpCode(AuthenticationCodeRequestDto request) {
+        String otpCodeKey = "OTP_CODE" + request.getUserId();
+        if(!redisService.exists(otpCodeKey)) {
+            throw new IllegalArgumentException("The code is expired.");
+        }
+
+        String savedOtpCode = (String) redisService.get(otpCodeKey);
+
+        if(savedOtpCode == null) {
+            throw new IllegalArgumentException("The code is expired.");
+        }
+
+        if(!savedOtpCode.equals(request.getAuthenticationCode())) {
+            throw new IllegalArgumentException("The code is incorrect.");
+        }
+
+        redisService.delete(otpCodeKey);
+        UserEntity userEntity = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RecordNotFoundException("User not found with the id: " + request.getUserId()));
+
+        return userEntity.getId();
     }
 }

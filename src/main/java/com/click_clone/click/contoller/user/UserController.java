@@ -5,9 +5,13 @@ import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDt
 import com.click_clone.click.contoller.user.dto.user.UserPasswordUpdateRequestDto;
 import com.click_clone.click.contoller.user.dto.user.UserResponseDto;
 import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.RedisService;
 import com.click_clone.click.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/user")

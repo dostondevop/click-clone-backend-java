@@ -3,6 +3,7 @@ package com.click_clone.click.contoller.user;
 import com.click_clone.click.contoller.device.convertor.DeviceConvertor;
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
 import com.click_clone.click.contoller.user.convertor.UserAuthConverter;
+import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateRequestDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateResponseDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserPasswordRequestDto;
@@ -33,10 +34,10 @@ public class AuthenticationController {
         return userConverter.userToDto(user, checked);
     }
 
-//    @PostMapping("/confirm")
-//    public void confirmCode(@RequestBody AuthenticationCodeRequestDto request) {
-//
-//    }
+    @PostMapping("/confirmOTP")
+    public UUID confirmCode(@RequestBody AuthenticationCodeRequestDto request) {
+        return userService.confirmOtpCode(request);
+    }
 
     @PutMapping
     public JwtResponseDto register(@RequestBody UserPasswordRequestDto request) throws IOException {
