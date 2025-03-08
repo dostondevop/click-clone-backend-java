@@ -24,12 +24,11 @@ public class ServiceEntity extends BaseEntity {
     private double commission = 0;
     private double cashback = 0;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Builder.Default
     private List<InputEntity> inputs = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(nullable = false)
     private AttachmentEntity imageAttachment;
 
     @ManyToOne

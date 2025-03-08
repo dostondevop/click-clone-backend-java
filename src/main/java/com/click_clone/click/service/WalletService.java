@@ -30,19 +30,20 @@ public class WalletService {
     @Async
     public void createWallet(UserEntity user) throws IOException {
         AttachmentEntity save = attachmentRepository.save(getAttachment());
+        cardRepository.save(buildCard(user, save));
+    }
 
-        CardEntity card = CardEntity.builder()
+    private CardEntity buildCard(UserEntity user, AttachmentEntity attachment) {
+        return CardEntity.builder()
                 .cardName("Click wallet")
                 .cardType(CardType.WALLET)
-                .bankImage(save)
+                .bankImage(attachment)
                 .currencyType(CurrencyType.UZS)
                 .expiryDate("unlimited")
                 .cardNumber(generateWalletNumber())
                 .user(user)
                 .considerInTotalBalance(true)
                 .build();
-
-        cardRepository.save(card);
     }
 
     private AttachmentEntity getAttachment() throws IOException {

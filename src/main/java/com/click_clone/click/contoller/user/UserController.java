@@ -1,15 +1,21 @@
 package com.click_clone.click.contoller.user;
 
+import com.click_clone.click.contoller.convertor.AttachmentConvertor;
 import com.click_clone.click.contoller.user.convertor.UserIdentifyConverter;
 import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDto;
 import com.click_clone.click.contoller.user.dto.user.UserPasswordUpdateRequestDto;
 import com.click_clone.click.contoller.user.dto.user.UserResponseDto;
+import com.click_clone.click.contoller.user.dto.user.UserUpdateRequestDto;
+import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.service.RedisService;
 import com.click_clone.click.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,13 +39,29 @@ public class UserController {
         return userIdentifyConverter.userToDto(user);
     }
 
+    @PutMapping
+    public UserResponseDto updateUserIdentifiedDetails(@RequestBody UserUpdateRequestDto requestDto) {
+        UserEntity user = userService.updateUserIdentifiedDetails(requestDto.getPassportId(),
+                requestDto.getIndividualIdNumber(),
+                requestDto.getDateOfIssue(),
+                requestDto.getExpiryDate());
+        return userIdentifyConverter.userToDto(user);
+    }
+
     @PutMapping("/password")
     public void updatePassword(@RequestBody UserPasswordUpdateRequestDto request) {
         userService.updatePassword(request.getOldPassword(), request.getNewPassword());
     }
 
-//    @PutMapping("/image")
-//    public UserResponseDto addImageToUser(@RequestParam("file") MultipartFile file) {
-//
-//    }
+    @PutMapping("/image")
+    public UserResponseDto addImageToUser(@RequestParam("file") MultipartFile file) throws IOException {
+        AttachmentEntity attachment = AttachmentConvertor.convertToEntity(file);
+        return userIdentifyConverter.userToDto(userService.setImageToUser(attachment));
+    }
+
+    @DeleteMapping("/image")
+    public UserResponseDto deleteUserImage() {
+        UserEntity user = userService.deleteUserImage();
+        return userIdentifyConverter.userToDto(user);
+    }
 }

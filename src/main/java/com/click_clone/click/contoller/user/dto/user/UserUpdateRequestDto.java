@@ -11,7 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class UserUpdateRequestDto {
-    private UUID id;
     private String passportId;
     private String individualIdNumber;
     private LocalDate dateOfIssue;

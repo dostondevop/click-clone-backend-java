@@ -1,11 +1,13 @@
 package com.click_clone.click.service;
 
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
+import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
 import com.click_clone.click.entity.RoleEntity;
 import com.click_clone.click.entity.UserEntity;
 import com.click_clone.click.entity.enums.UserRole;
 import com.click_clone.click.exception.RecordNotFoundException;
+import com.click_clone.click.repository.AttachmentRepository;
 import com.click_clone.click.repository.RoleRepository;
 import com.click_clone.click.repository.UserRepository;
 import com.click_clone.click.service.util.MessageUtil;
@@ -29,6 +31,7 @@ public class UserService {
     private final WalletService walletService;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
+    private final AttachmentRepository attachmentRepository;
     private final OtpEmailService emailService;
     private final RedisService redisService;
 
@@ -133,6 +136,33 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    public UserEntity setImageToUser(AttachmentEntity attachment) {
+        UserEntity user = getCurrentUser();
+        user.setImage(attachment);
+        return userRepository.save(user);
+    }
+
+    public UserEntity deleteUserImage() {
+        UserEntity user = getCurrentUser();
+        AttachmentEntity image = user.getImage();
+        user.setImage(null);
+        userRepository.save(user);
+        attachmentRepository.delete(image);
+        return user;
+    }
+
+    public UserEntity updateUserIdentifiedDetails(String passportId,
+                                                  String individualIdNumber,
+                                                  LocalDate dateOfIssue,
+                                                  LocalDate expiryDate) {
+        UserEntity user = getCurrentUser();
+        user.setPassportId(passportId);
+        user.setIndividualIdNumber(individualIdNumber);
+        user.setDateOfIssue(dateOfIssue);
+        user.setExpiryDate(expiryDate);
+        return userRepository.save(user);
     }
 
     public UUID confirmOtpCode(AuthenticationCodeRequestDto request) {

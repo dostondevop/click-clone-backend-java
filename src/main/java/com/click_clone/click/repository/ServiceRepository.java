@@ -5,7 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+import java.util.List;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
+    List<ServiceEntity> findAllByCategoryEntity_Id(UUID categoryId);
+    List<ServiceEntity> findTop10ByOrderByCashbackDesc();
+    List<ServiceEntity> findAllByNameContains(String name);
 }

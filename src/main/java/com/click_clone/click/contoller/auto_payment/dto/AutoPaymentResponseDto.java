@@ -1,7 +1,7 @@
 package com.click_clone.click.contoller.auto_payment.dto;
 
 import com.click_clone.click.contoller.card.dto.CardResponseDto;
-import com.click_clone.click.contoller.service.dto.ServiceResponseDto;
+import com.click_clone.click.contoller.service.dto.service.service.ServiceResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

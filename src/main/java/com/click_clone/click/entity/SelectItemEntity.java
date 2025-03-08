@@ -28,7 +28,7 @@ public class SelectItemEntity {
     @JsonBackReference
     private SelectItemEntity parent;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem")
     @JsonManagedReference
     @Builder.Default
     private List<ServiceSerialNumberEntity> serviceSerialNumbers = new ArrayList<>();

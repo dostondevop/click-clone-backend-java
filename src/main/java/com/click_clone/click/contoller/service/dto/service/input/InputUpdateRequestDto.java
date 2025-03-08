@@ -1,4 +1,4 @@
-package com.click_clone.click.contoller.service.dto;
+package com.click_clone.click.contoller.service.dto.service.input;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class InputResponseDto {
+public class InputUpdateRequestDto {
     private UUID id;
     private String label;
     private String placeholder;
