@@ -11,12 +11,10 @@ import com.click_clone.click.repository.AttachmentRepository;
 import com.click_clone.click.repository.RoleRepository;
 import com.click_clone.click.repository.UserRepository;
 import com.click_clone.click.service.util.MessageUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,7 +30,7 @@ public class UserService {
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
     private final AttachmentRepository attachmentRepository;
-    private final OtpEmailService emailService;
+    private final EmailSenderService emailService;
     private final RedisService redisService;
 
     public UserEntity getUserById(UUID id) {

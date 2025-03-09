@@ -1,6 +1,7 @@
 package com.click_clone.click.service;
 
 import com.click_clone.click.entity.*;
+import com.click_clone.click.entity.enums.InputType;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ public class ServiceService {
     private final InputRepository inputRepository;
     private final ServiceSerialNumberRepository serviceSerialNumberRepository;
     private final AttachmentRepository attachmentRepository;
-    private final SelectItemRepository selectItemRepository;
     private final CategoryRepository categoryRepository;
 
     public ServiceEntity getServiceById(UUID id) {
@@ -43,24 +43,6 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-    public InputEntity createInput(InputEntity input) {
-        return inputRepository.save(input);
-    }
-
-    public ServiceEntity bindInputToService(UUID serviceId, UUID inputId) {
-        ServiceEntity service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
-        InputEntity input = inputRepository.findById(inputId)
-                .orElseThrow(() -> new RecordNotFoundException("Input not found."));
-
-        service.getInputs().add(input);
-        return serviceRepository.save(service);
-    }
-
-    public ServiceSerialNumberEntity createSerialNumber(ServiceSerialNumberEntity serialNumber) {
-        return serviceSerialNumberRepository.save(serialNumber);
-    }
-
     public void setImageToService(UUID serviceId, AttachmentEntity attachment) {
         ServiceEntity service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new RecordNotFoundException("Service not found."));
@@ -79,17 +61,15 @@ public class ServiceService {
         service.setImageAttachment(attachment);
     }
 
-    public SelectItemEntity createSelectItem(SelectItemEntity selectItem) {
-        return selectItemRepository.save(selectItem);
-    }
-
     public ServiceEntity updateService(UUID id, String name,
                                        double commission, double cashback, UUID categoryId) {
         ServiceEntity service = serviceRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Service not found"));
+
         service.setName(name);
         service.setCommission(commission);
         service.setCashback(cashback);
+
         setCategory(service, categoryId);
         return serviceRepository.save(service);
     }
@@ -126,5 +106,20 @@ public class ServiceService {
         serialNumber.setService(null);
         serviceSerialNumberRepository.save(serialNumber);
         serviceSerialNumberRepository.delete(serialNumber);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    public void deleteService(UUID id) {
+        ServiceEntity service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+
+        iterateAllInputs(service);
+        serviceRepository.delete(service);
+    }
+
+    private void iterateAllInputs(ServiceEntity service) {
+        service.getInputs()
+                .forEach(input ->
+                        deleteAllServiceSerialNumbersFromInputSelectItems(service, input));
     }
 }

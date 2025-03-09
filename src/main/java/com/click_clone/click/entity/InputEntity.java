@@ -30,7 +30,7 @@ public class InputEntity {
     @Enumerated(EnumType.STRING)
     private InputType inputType;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonManagedReference
     @Builder.Default
     private List<SelectItemEntity> selectItems = new ArrayList<>();

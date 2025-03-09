@@ -23,12 +23,13 @@ public class SelectItemEntity {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "parent_id")
     @JsonBackReference
     private SelectItemEntity parent;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "selectItem",
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference
     @Builder.Default
     private List<ServiceSerialNumberEntity> serviceSerialNumbers = new ArrayList<>();
