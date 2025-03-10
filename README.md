@@ -24,4 +24,5 @@ Java, Spring Boot, Spring Security 🔐
 </br>🚀 Ready to Explore?
 </br>💻 Clone the repo and start building your Click-like payment system! Whether you're a developer looking to learn Spring Boot security & transactions or want to expand your fintech project, this is the perfect backend to explore.
 </br>
-</br>⭐ If you love this project, please give it a STAR! 🌟 Your support keeps open-source projects alive! 😊
+</br>⭐ If you love this project, please give it a STAR!🌟 
+</br><i>Your support keeps me motivated😊</i>
