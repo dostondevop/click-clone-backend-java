@@ -1,19 +1,20 @@
 package com.click_clone.click.contoller.home.dto;
 
-import com.click_clone.click.contoller.favorite.dto.FavoriteResponseDto;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import com.click_clone.click.contoller.favorite.dto.FavoriteResponseDto;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HomeResponseDto {
     private UUID id;
     private String name;
-    private String thisMonth;
     private String amount;
-    private FavoriteResponseDto favorite;
+    private String thisMonth;
 }

@@ -5,6 +5,7 @@ import com.click_clone.click.contoller.service.dto.category.CategoryResponseDto;
 import com.click_clone.click.entity.CategoryEntity;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.CategoryRepository;
+import com.click_clone.click.service.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class CategoryConvertor {
             return new ArrayList<>();
         }
         CategoryEntity categoryEntity = categoryRepository.findById(parentId)
-                .orElseThrow(() -> new RecordNotFoundException("Category not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CATEGORY_NOT_FOUND_ERROR));
         return List.of(categoryEntity);
     }
 

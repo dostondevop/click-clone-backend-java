@@ -1,20 +1,20 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.AutoPayType;
-import com.click_clone.click.entity.enums.DayOfWeek;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
+import com.click_clone.click.entity.enums.DayOfWeek;
+import com.click_clone.click.entity.enums.AutoPayType;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class AutoPaymentEntity extends BaseEntity {
 
     @Id

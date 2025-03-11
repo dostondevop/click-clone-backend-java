@@ -1,20 +1,21 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.entity.DeviceEntity;
-import com.click_clone.click.exception.RecordNotFoundException;
-import com.click_clone.click.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.entity.DeviceEntity;
+import com.click_clone.click.service.util.MessageUtil;
+import com.click_clone.click.repository.DeviceRepository;
+import com.click_clone.click.exception.RecordNotFoundException;
 
+import java.util.UUID;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class DeviceService {
-    private final DeviceRepository deviceRepository;
     private final UserService userService;
+    private final DeviceRepository deviceRepository;
 
     public List<DeviceEntity> getAllDevices() {
         return deviceRepository.findAllByUser_Id(userService.getCurrentUser().getId());
@@ -22,7 +23,7 @@ public class DeviceService {
 
     public DeviceEntity getDevice(UUID deviceId) {
         return deviceRepository.findById(deviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Device not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.DEVICE_NOT_FOUND_ERROR));
     }
 
     public boolean checkExistenceDevice(UUID userId, DeviceEntity device) {
@@ -48,7 +49,7 @@ public class DeviceService {
 
     public void deleteUserDevice(UUID id) {
         DeviceEntity deviceEntity = deviceRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Device not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.DEVICE_NOT_FOUND_ERROR));
 
         deleteDevice(deviceEntity);
     }

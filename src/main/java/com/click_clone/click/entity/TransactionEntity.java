@@ -1,21 +1,19 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.TransactionStatus;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.*;
+import jakarta.persistence.*;
+import com.click_clone.click.entity.enums.TransactionStatus;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Builder
 public class TransactionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

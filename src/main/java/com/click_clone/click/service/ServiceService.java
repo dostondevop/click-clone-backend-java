@@ -1,12 +1,13 @@
 package com.click_clone.click.service;
 
 import com.click_clone.click.entity.*;
-import com.click_clone.click.exception.RecordNotFoundException;
-import com.click_clone.click.repository.*;
 import lombok.RequiredArgsConstructor;
+import com.click_clone.click.repository.*;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.service.util.MessageUtil;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
+import com.click_clone.click.exception.RecordNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -15,16 +16,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ServiceService {
-    private final ServiceRepository serviceRepository;
     private final InputRepository inputRepository;
-    private final ServiceSerialNumberRepository serviceSerialNumberRepository;
+    private final ServiceRepository serviceRepository;
+    private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
     private final SelectItemRepository selectItemRepository;
-    private final CategoryRepository categoryRepository;
+    private final ServiceSerialNumberRepository serviceSerialNumberRepository;
 
     public ServiceEntity getServiceById(UUID id) {
         return serviceRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
     }
 
     public List<ServiceEntity> getServicesByCategoryId(UUID categoryId) {
@@ -49,9 +50,9 @@ public class ServiceService {
 
     public ServiceEntity bindInputToService(UUID serviceId, UUID inputId) {
         ServiceEntity service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
         InputEntity input = inputRepository.findById(inputId)
-                .orElseThrow(() -> new RecordNotFoundException("Input not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.INPUT_NOT_FOUND_ERROR));
 
         service.getInputs().add(input);
         return serviceRepository.save(service);
@@ -63,7 +64,7 @@ public class ServiceService {
 
     public void setImageToService(UUID serviceId, AttachmentEntity attachment) {
         ServiceEntity service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
 
         setAttachment(service, attachment);
         serviceRepository.save(service);
@@ -86,7 +87,7 @@ public class ServiceService {
     public ServiceEntity updateService(UUID id, String name,
                                        double commission, double cashback, UUID categoryId) {
         ServiceEntity service = serviceRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found"));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
         service.setName(name);
         service.setCommission(commission);
         service.setCashback(cashback);
@@ -97,7 +98,7 @@ public class ServiceService {
     private void setCategory(ServiceEntity service, UUID categoryId) {
         if (categoryId != null) {
             CategoryEntity category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new RecordNotFoundException("Category not found."));
+                    .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CATEGORY_NOT_FOUND_ERROR));
             service.setCategoryEntity(category);
         }
     }
@@ -105,9 +106,9 @@ public class ServiceService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public ServiceEntity unbindInputFromService(UUID serviceId, UUID inputId) {
         ServiceEntity service = serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
         InputEntity input = inputRepository.findById(inputId)
-                .orElseThrow(() -> new RecordNotFoundException("Input not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.INPUT_NOT_FOUND_ERROR));
         deleteAllServiceSerialNumbersFromInputSelectItems(service, input);
         service.getInputs().remove(input);
         return serviceRepository.save(service);

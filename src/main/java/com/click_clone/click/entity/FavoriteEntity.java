@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Builder
 public class FavoriteEntity extends BaseEntity {
 
     @Id

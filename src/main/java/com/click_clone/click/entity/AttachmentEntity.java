@@ -1,16 +1,16 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.AttachmentType;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
+import com.click_clone.click.entity.enums.AttachmentType;
 
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AttachmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

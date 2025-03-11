@@ -1,26 +1,26 @@
 package com.click_clone.click.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.data.annotation.LastModifiedDate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails {
     @Id

@@ -1,18 +1,18 @@
 package com.click_clone.click.contoller.token;
 
-import com.click_clone.click.contoller.token.dto.JwtResponseDto;
-import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
+import lombok.RequiredArgsConstructor;
 import com.click_clone.click.service.TokenService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.click_clone.click.contoller.token.dto.JwtResponseDto;
+import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
 
 @RestController
-@RequestMapping("/api/token")
 @RequiredArgsConstructor
+@RequestMapping("/api/token")
 public class TokenController {
 
     private final TokenService tokenService;

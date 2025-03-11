@@ -1,12 +1,13 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.util.MessageUtil;
+import com.click_clone.click.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.click_clone.click.contoller.token.dto.RefreshTokenDto;
 
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class TokenService {
         String username = claims.getSubject();
         Optional<UserEntity> optionalUser = userRepository.findByPhoneNumber(username);
         if (optionalUser.isEmpty()) {
-            throw new IllegalStateException("User not found");
+            throw new IllegalStateException(MessageUtil.USER_NOT_FOUND_ERROR);
         }
         return jwtService.generateAccessToken(optionalUser.get());
     }

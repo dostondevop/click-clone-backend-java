@@ -1,18 +1,18 @@
 package com.click_clone.click.contoller.user.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
+import java.util.UUID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto {
     private UUID userId;
     private String phoneNumber;

@@ -1,19 +1,18 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.entity.AttachmentEntity;
-import com.click_clone.click.entity.CardEntity;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.entity.enums.CardType;
-import com.click_clone.click.entity.enums.CurrencyType;
-import com.click_clone.click.exception.RecordNotFoundException;
-import com.click_clone.click.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.entity.CardEntity;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.util.MessageUtil;
+import com.click_clone.click.entity.enums.CurrencyType;
+import com.click_clone.click.repository.UserRepository;
 import com.click_clone.click.repository.CardRepository;
+import com.click_clone.click.exception.RecordNotFoundException;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +29,12 @@ public class CardService {
 
     public CardEntity getCard(UUID cardId) {
         return cardRepository.findById(cardId)
-                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CARD_NOT_FOUND_ERROR));
     }
 
     public CardEntity getMainCard() {
         return cardRepository.findByUser_IdAndMainIsTrue(userService.getCurrentUser().getId())
-                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CARD_NOT_FOUND_ERROR));
     }
 
     public String getTotalBalance() {
@@ -71,7 +70,7 @@ public class CardService {
                            boolean considerInTotalBalance,
                            boolean monitoring) {
         CardEntity cardEntity = cardRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CARD_NOT_FOUND_ERROR));
 
         cardEntity.setCardName(cardName);
         cardEntity.setConsiderInTotalBalance(considerInTotalBalance);
@@ -82,7 +81,7 @@ public class CardService {
 
     public void deleteCard(UUID cardId) {
         CardEntity card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RecordNotFoundException("Card not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.CARD_NOT_FOUND_ERROR));
 
         UserEntity user = userService.getCurrentUser();
         user.getCards().remove(card);

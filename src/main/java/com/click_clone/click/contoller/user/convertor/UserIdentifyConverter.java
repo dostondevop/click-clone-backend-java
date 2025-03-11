@@ -1,10 +1,10 @@
 package com.click_clone.click.contoller.user.convertor;
 
-import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDto;
-import com.click_clone.click.contoller.user.dto.user.UserResponseDto;
-import com.click_clone.click.entity.AttachmentEntity;
 import com.click_clone.click.entity.UserEntity;
 import org.springframework.stereotype.Component;
+import com.click_clone.click.entity.AttachmentEntity;
+import com.click_clone.click.contoller.user.dto.user.UserResponseDto;
+import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDto;
 
 import java.util.UUID;
 

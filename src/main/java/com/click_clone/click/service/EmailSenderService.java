@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class OtpEmailService {
+public class EmailSenderService {
 
     @Autowired
     private JavaMailSender mailSender;

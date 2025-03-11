@@ -1,10 +1,10 @@
 package com.click_clone.click.contoller.user.convertor;
 
+import com.click_clone.click.entity.UserEntity;
+import org.springframework.stereotype.Component;
+import com.click_clone.click.entity.enums.UserRole;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateRequestDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateResponseDto;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.entity.enums.UserRole;
-import org.springframework.stereotype.Component;
 
 @Component
 public class UserAuthConverter {

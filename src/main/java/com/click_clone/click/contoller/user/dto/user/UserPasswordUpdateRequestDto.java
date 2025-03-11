@@ -1,14 +1,12 @@
 package com.click_clone.click.contoller.user.dto.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import java.util.UUID;
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserPasswordUpdateRequestDto {
     private String oldPassword;
     private String newPassword;

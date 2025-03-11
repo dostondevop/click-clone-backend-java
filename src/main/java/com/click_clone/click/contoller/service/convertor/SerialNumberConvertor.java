@@ -8,6 +8,7 @@ import com.click_clone.click.entity.ServiceSerialNumberEntity;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.SelectItemRepository;
 import com.click_clone.click.repository.ServiceRepository;
+import com.click_clone.click.service.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,12 +30,12 @@ public class SerialNumberConvertor {
 
     private SelectItemEntity getSelectItem(UUID selectItemId) {
         return selectItemRepository.findById(selectItemId)
-                .orElseThrow(() -> new RecordNotFoundException("Select Item not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SELECT_ITEM_NOT_FOUND_ERROR));
     }
 
     private ServiceEntity getService(UUID serviceId) {
         return serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new RecordNotFoundException("Service not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SERVICE_NOT_FOUND_ERROR));
     }
 
     public SerialNumberCreateResponseDto serialNumberToDto(ServiceSerialNumberEntity entity) {

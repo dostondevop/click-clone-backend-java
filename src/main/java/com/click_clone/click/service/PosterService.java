@@ -1,12 +1,13 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.entity.AttachmentEntity;
-import com.click_clone.click.entity.PosterEntity;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.exception.RecordNotFoundException;
-import com.click_clone.click.repository.PosterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.entity.PosterEntity;
+import com.click_clone.click.entity.AttachmentEntity;
+import com.click_clone.click.service.util.MessageUtil;
+import com.click_clone.click.repository.PosterRepository;
+import com.click_clone.click.exception.RecordNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class PosterService {
 
     public PosterEntity getPosterById(UUID id) {
         return posterRepository.findByIdAndActiveIsTrue(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
     }
 
     public PosterEntity create(PosterEntity poster) {
@@ -32,14 +33,14 @@ public class PosterService {
 
     public PosterEntity addImage(UUID id, AttachmentEntity image) {
         PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
         poster.setImageAttachment(image);
         return posterRepository.save(poster);
     }
 
     public PosterEntity updatePoster(UUID id, String title, String content) {
         PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
 
         if (title != null) {
             poster.setTitle(title);
@@ -54,14 +55,14 @@ public class PosterService {
 
     public PosterEntity addViewer(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
         poster.getViewers().add(userService.getCurrentUser());
         return posterRepository.save(poster);
     }
 
     public PosterEntity likePoster(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
 
         UserEntity user = userService.getCurrentUser();
         if (!poster.getLikedPeople().contains(user)) {
@@ -82,7 +83,7 @@ public class PosterService {
 
     public PosterEntity inactivatePoster(UUID id) {
         PosterEntity poster = posterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Poster not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.POSTER_NOT_FOUND_ERROR));
         poster.setActive(false);
         return posterRepository.save(poster);
     }

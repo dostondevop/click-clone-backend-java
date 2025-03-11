@@ -1,19 +1,19 @@
 package com.click_clone.click.entity;
 
+import lombok.*;
+import jakarta.persistence.*;
 import com.click_clone.click.entity.enums.InputType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class InputEntity {
 
     @Id
@@ -30,8 +30,8 @@ public class InputEntity {
     @Enumerated(EnumType.STRING)
     private InputType inputType;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonManagedReference
     @Builder.Default
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL)
     private List<SelectItemEntity> selectItems = new ArrayList<>();
 }

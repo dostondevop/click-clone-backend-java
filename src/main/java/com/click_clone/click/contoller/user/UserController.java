@@ -1,27 +1,23 @@
 package com.click_clone.click.contoller.user;
 
+import lombok.RequiredArgsConstructor;
+import com.click_clone.click.entity.UserEntity;
+import org.springframework.web.bind.annotation.*;
+import com.click_clone.click.service.UserService;
+import com.click_clone.click.entity.AttachmentEntity;
+import org.springframework.web.multipart.MultipartFile;
 import com.click_clone.click.contoller.convertor.AttachmentConvertor;
-import com.click_clone.click.contoller.user.convertor.UserIdentifyConverter;
-import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDto;
-import com.click_clone.click.contoller.user.dto.user.UserPasswordUpdateRequestDto;
 import com.click_clone.click.contoller.user.dto.user.UserResponseDto;
 import com.click_clone.click.contoller.user.dto.user.UserUpdateRequestDto;
-import com.click_clone.click.entity.AttachmentEntity;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.service.RedisService;
-import com.click_clone.click.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import com.click_clone.click.contoller.user.convertor.UserIdentifyConverter;
+import com.click_clone.click.contoller.user.dto.user.UserPasswordUpdateRequestDto;
+import com.click_clone.click.contoller.user.dto.user.UserIdentificationRequestDto;
 
 import java.io.IOException;
 
-import java.util.concurrent.TimeUnit;
-
 @RestController
-@RequestMapping("/api/user")
 @RequiredArgsConstructor
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
     private final UserIdentifyConverter userIdentifyConverter;

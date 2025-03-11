@@ -1,8 +1,8 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.repository.ServiceSerialNumberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.click_clone.click.repository.ServiceSerialNumberRepository;
 
 @Service
 @RequiredArgsConstructor

@@ -1,18 +1,18 @@
 package com.click_clone.click.contoller.service;
 
-import com.click_clone.click.contoller.service.convertor.CategoryConvertor;
-import com.click_clone.click.contoller.service.dto.category.*;
-import com.click_clone.click.entity.CategoryEntity;
-import com.click_clone.click.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.click_clone.click.entity.CategoryEntity;
+import com.click_clone.click.service.CategoryService;
+import com.click_clone.click.contoller.service.dto.category.*;
+import com.click_clone.click.contoller.service.convertor.CategoryConvertor;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/category")
 @RequiredArgsConstructor
+@RequestMapping("/api/category")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryConvertor categoryConvertor;

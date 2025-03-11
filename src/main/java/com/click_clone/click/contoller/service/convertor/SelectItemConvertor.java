@@ -7,6 +7,7 @@ import com.click_clone.click.entity.SelectItemEntity;
 import com.click_clone.click.exception.RecordNotFoundException;
 import com.click_clone.click.repository.InputRepository;
 import com.click_clone.click.repository.SelectItemRepository;
+import com.click_clone.click.service.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +32,12 @@ public class SelectItemConvertor {
             return null;
         }
         return selectItemRepository.findById(parentId)
-                .orElseThrow(() -> new RecordNotFoundException("Select Item not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.SELECT_ITEM_NOT_FOUND_ERROR));
     }
 
     private InputEntity getInput(UUID inputId) {
         return inputRepository.findById(inputId)
-                .orElseThrow(() -> new RecordNotFoundException("Input not found."));
+                .orElseThrow(() -> new RecordNotFoundException(MessageUtil.INPUT_NOT_FOUND_ERROR));
     }
 
     public SelectItemOneCreateResponseDto selectItemToDto(SelectItemEntity selectItem) {

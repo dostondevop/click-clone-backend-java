@@ -1,14 +1,16 @@
 package com.click_clone.click.contoller.favorite.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InputWithDataResponseDto {
     private UUID id;
     private String label;

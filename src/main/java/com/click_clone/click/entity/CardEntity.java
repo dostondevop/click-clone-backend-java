@@ -1,22 +1,21 @@
 package com.click_clone.click.entity;
 
+import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import com.click_clone.click.entity.enums.CardType;
 import com.click_clone.click.entity.enums.CurrencyType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.*;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Builder
 public class  CardEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

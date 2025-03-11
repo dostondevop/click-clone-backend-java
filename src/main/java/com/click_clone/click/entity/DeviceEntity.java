@@ -1,17 +1,17 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.DeviceType;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
+import com.click_clone.click.entity.enums.DeviceType;
 
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Builder
 public class DeviceEntity extends BaseEntity {
 
     @Id

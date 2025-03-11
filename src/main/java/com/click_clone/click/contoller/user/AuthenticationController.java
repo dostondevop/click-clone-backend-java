@@ -1,24 +1,25 @@
 package com.click_clone.click.contoller.user;
 
-import com.click_clone.click.contoller.device.convertor.DeviceConvertor;
+import lombok.RequiredArgsConstructor;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.UserService;
+import com.click_clone.click.entity.DeviceEntity;
+import org.springframework.web.bind.annotation.*;
+import com.click_clone.click.service.DeviceService;
 import com.click_clone.click.contoller.token.dto.JwtResponseDto;
 import com.click_clone.click.contoller.user.convertor.UserAuthConverter;
-import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
+import com.click_clone.click.contoller.device.convertor.DeviceConvertor;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateRequestDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserCreateResponseDto;
 import com.click_clone.click.contoller.user.dto.authentication.UserPasswordRequestDto;
-import com.click_clone.click.entity.DeviceEntity;
-import com.click_clone.click.entity.UserEntity;
-import com.click_clone.click.service.DeviceService;
-import com.click_clone.click.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import com.click_clone.click.contoller.user.dto.authentication.AuthenticationCodeRequestDto;
 
+import java.util.UUID;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@RequestMapping("/api/auth")
 public class AuthenticationController {
     private final UserService userService;
     private final UserAuthConverter userConverter;

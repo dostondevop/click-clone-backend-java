@@ -1,19 +1,19 @@
 package com.click_clone.click.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
+import java.util.ArrayList;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class HomeEntity extends BaseEntity {
 
     @Id
@@ -23,8 +23,11 @@ public class HomeEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "home")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "home")
     @JsonManagedReference
     @Builder.Default
     private List<FavoriteEntity> favoriteList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity user;
 }

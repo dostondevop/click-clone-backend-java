@@ -1,18 +1,17 @@
 package com.click_clone.click;
 
-import com.click_clone.click.service.CurrencyService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Random;
 
-@SpringBootApplication
 @EnableAsync
 @EnableFeignClients
+@SpringBootApplication
 public class ClickCloneApplication {
 
 	public static void main(String[] args) {
@@ -22,5 +21,10 @@ public class ClickCloneApplication {
 	@Bean
 	public Random random() {
 		return new Random();
+	}
+
+	@Bean
+	public ObjectMapper objectMapper() {
+		return new ObjectMapper();
 	}
 }

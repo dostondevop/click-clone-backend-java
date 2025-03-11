@@ -1,16 +1,16 @@
 package com.click_clone.click.entity;
 
-import com.click_clone.click.entity.enums.UserRole;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import com.click_clone.click.entity.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleEntity implements GrantedAuthority {
 
     @Id

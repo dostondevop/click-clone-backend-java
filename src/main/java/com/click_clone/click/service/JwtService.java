@@ -1,18 +1,18 @@
 package com.click_clone.click.service;
 
-import com.click_clone.click.entity.UserEntity;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.Setter;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.stereotype.Service;
+import com.click_clone.click.entity.UserEntity;
+import com.click_clone.click.service.util.MessageUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import java.util.Date;
 import java.util.Map;
+import java.util.Date;
+import javax.crypto.SecretKey;
 
 @Setter
 @Service
@@ -31,7 +31,7 @@ public class JwtService {
     @Value("${jwt.refresh.token.expire.date}")
     private Long jwtRefreshTokenExpireDate;
 
-    public String generateAccessToken(UserEntity userDetails) throws JsonProcessingException {
+    public String generateAccessToken(UserEntity userDetails) {
         Date currentTime = new Date();
         return Jwts.builder()
                 .subject(userDetails.getUsername())
@@ -44,7 +44,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateRefreshToken(UserEntity userDetails) throws JsonProcessingException {
+    public String generateRefreshToken(UserEntity userDetails) {
         Date currentTime = new Date();
         return Jwts.builder()
                 .subject(userDetails.getUsername())
@@ -67,13 +67,13 @@ public class JwtService {
             SecretKey key = getAccessTokenSecretKey();
             Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken);
         } catch(SecurityException | MalformedJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.JWT_WAS_EXPIRED_OR_INCORRECT_ERROR);
         } catch (ExpiredJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("Expired JWT token.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.EXPIRED_JWT_TOKEN_ERROR);
         } catch (UnsupportedJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("Unsupported JWT token.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.UNSUPPORTED_JWT_TOKEN_ERROR);
         } catch (IllegalArgumentException e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT token compact of handler are invalid.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.JWT_TOKEN_COMPACT_OF_HANDLER_IS_INVALID_ERROR);
         }
     }
 
@@ -82,13 +82,13 @@ public class JwtService {
             SecretKey key = getRefreshTokenSecretKey();
             Jwts.parser().verifyWith(key).build().parseSignedClaims(refreshToken);
         } catch(SecurityException | MalformedJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.JWT_WAS_EXPIRED_OR_INCORRECT_ERROR);
         } catch (ExpiredJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("Expired JWT token.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.EXPIRED_JWT_TOKEN_ERROR);
         } catch (UnsupportedJwtException e) {
-            throw new AuthenticationCredentialsNotFoundException("Unsupported JWT token.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.UNSUPPORTED_JWT_TOKEN_ERROR);
         } catch (IllegalArgumentException e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT token compact of handler are invalid.");
+            throw new AuthenticationCredentialsNotFoundException(MessageUtil.JWT_TOKEN_COMPACT_OF_HANDLER_IS_INVALID_ERROR);
         }
     }
 

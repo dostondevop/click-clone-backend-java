@@ -1,14 +1,14 @@
 package com.click_clone.click.contoller.transaction.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRequestDto {
     private UUID serviceId;
     private String amount;
