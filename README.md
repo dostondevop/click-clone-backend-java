@@ -20,7 +20,7 @@ Java, Spring Boot, Spring Security 🔐
 </br>Redis 🚀 for caching and improving performance
 </br>WebSockets 🌐 for real-time transaction updates
 </br>Email & OTP Verification 📩 for secure authentication
-</br>**Frontend:** The frontend repo (written in React) complements this backend
+</br><h5>Frontend:</h5> The frontend repo (written in React) complements this backend
 </br>🚀 Ready to Explore?
 </br>💻 Clone the repo and start building your Click-like payment system! Whether you're a developer looking to learn Spring Boot security & transactions or want to expand your fintech project, this is the perfect backend to explore.
 </br>
